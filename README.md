@@ -1,5 +1,7 @@
 
 
+Debug Lua scripts running within Nginx 
+
 # This worked
 podman run -p 7070:8888 openresty/openresty:1.11.2.3-xenial
 
@@ -32,5 +34,76 @@ docker  run --rm  -it  -p 7070:8888  -v $(pwd)/app.lua:/tmp/app.lua -v $(pwd)/ng
 Using docker because I could not get podman working with bind mounts.
 Most likely this issue:
 https://github.com/containers/podman/issues/8302
+
+
+
+# Now, off to try this out:
+http://notebook.kulchenko.com/zerobrane/debugging-openresty-nginx-lua-scripts-with-zerobrane-studio
+
+## Shelving this for now ... feels more involved
+
+# Refactor Dockerfile 
+Refactor Dockerfile  so we dont need all the bind mounts ... new Dockerfile moves everything inside the container
+... and this might actually work with `podman` 
+
+New Dockerfile (commit: c65f83f):
+```
+FROM openresty/openresty:1.11.2.3-xenial
+
+RUN mkdir -p /usr/local/openresty/nginx/lua
+COPY nginx_lua /usr/local/openresty/nginx/lua
+COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
+
+CMD [ "-p", "/usr/local/openresty/nginx", "-c", "conf/nginx.conf"]
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
